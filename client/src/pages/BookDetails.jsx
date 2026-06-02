@@ -1,0 +1,120 @@
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
+
+export default function BookDetails() {
+  const { id } = useParams();
+  const { user } = useAuth();
+  
+  const [book, setBook] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({ rating: 5, comment: '' });
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const [bookRes, reviewsRes] = await Promise.all([
+        api.get(`/books/${id}`),
+        api.get(`/reviews/book/${id}`)
+      ]);
+      setBook(bookRes.data.book);
+      setReviews(reviewsRes.data.reviews);
+    } catch (err) {
+      toast.error('Failed to load book details');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, [id]);
+
+  const handleAction = async (actionType) => {
+    try {
+      const endpoint = actionType === 'borrow' ? `/borrowings/${id}/borrow` : `/reservations/${id}`;
+      await api.post(endpoint);
+      toast.success(`Book ${actionType}ed successfully`);
+      fetchData();
+    } catch (err) {
+      toast.error(err.response?.data?.message || `Failed to ${actionType} book`);
+    }
+  };
+
+  const submitReview = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post(`/reviews/${id}`, reviewForm);
+      toast.success('Review submitted');
+      setReviewForm({ rating: 5, comment: '' });
+      fetchData();
+    } catch (err) {
+      toast.error('Failed to post review');
+    }
+  };
+
+  if (isLoading) return <div className="text-center p-10">Loading book details...</div>;
+  if (!book) return <div className="text-center p-10">Book not found.</div>;
+
+  return (
+    <div className="grid lg:grid-cols-3 gap-6">
+      {/* Book Information */}
+      <div className="lg:col-span-2 bg-white rounded-xl shadow p-6">
+        <h1 className="text-3xl font-bold text-slate-900">{book.title}</h1>
+        <p className="text-slate-600 text-lg mb-4">by {book.author}</p>
+        <p className="text-slate-700 leading-relaxed">{book.description}</p>
+        
+        <div className="grid sm:grid-cols-2 gap-4 mt-6 p-4 bg-slate-50 rounded-lg text-sm">
+          <p><span className="font-semibold">ISBN:</span> {book.isbn}</p>
+          <p><span className="font-semibold">Genre:</span> {book.genre}</p>
+          <p><span className="font-semibold">Year:</span> {book.publicationYear}</p>
+          <p><span className="font-semibold">Availability:</span> {book.availableCopies}/{book.copies}</p>
+          <p><span className="font-semibold">Rating:</span> {book.averageRating || 0}/5</p>
+        </div>
+
+        {user && (
+          <div className="flex gap-3 mt-6">
+            <button onClick={() => handleAction('borrow')} className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700">Borrow</button>
+            <button onClick={() => handleAction('reserve')} className="bg-amber-500 text-white px-6 py-2 rounded-lg hover:bg-amber-600">Reserve</button>
+          </div>
+        )}
+      </div>
+
+      {/* Reviews Section */}
+      <div className="bg-white rounded-xl shadow p-6 h-fit">
+        <h2 className="text-xl font-bold mb-4">Reviews</h2>
+        <div className="space-y-4 mb-6">
+          {reviews.length > 0 ? reviews.map((r) => (
+            <div key={r._id} className="border-b border-slate-100 pb-2">
+              <p className="font-bold text-sm">{r.user?.name || 'Anonymous'}</p>
+              <p className="text-yellow-600 text-xs font-semibold">{r.rating}/5</p>
+              <p className="text-sm text-slate-700">{r.comment}</p>
+            </div>
+          )) : <p className="text-slate-500 text-sm italic">No reviews yet.</p>}
+        </div>
+
+        {user && (
+          <form onSubmit={submitReview} className="space-y-3 pt-4 border-t">
+            <select 
+              className="border p-2 rounded w-full bg-white" 
+              value={reviewForm.rating} 
+              onChange={e => setReviewForm({...reviewForm, rating: Number(e.target.value)})}
+            >
+              {[5, 4, 3, 2, 1].map(n => <option key={n} value={n}>{n} Stars</option>)}
+            </select>
+            <textarea 
+              className="border p-2 rounded w-full" 
+              placeholder="Write a review..." 
+              value={reviewForm.comment} 
+              onChange={e => setReviewForm({...reviewForm, comment: e.target.value})}
+              required
+            />
+            <button className="w-full bg-slate-800 text-white py-2 rounded-lg hover:bg-black transition-colors">Post Review</button>
+          </form>
+        )}
+      </div>
+    </div>
+  );
+}
