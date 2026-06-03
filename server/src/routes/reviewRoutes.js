@@ -1,40 +1,27 @@
-const router = require('express').Router();
-const protect = require('../middleware/auth');
-const role = require('../middleware/role');
-const reviewController = require('../controllers/reviewController');
+const express = require("express");
+const router = express.Router();
 
-// @route   POST /api/reviews/:bookId
-// @desc    Post a new review for a book
-router.post('/:bookId', protect, reviewController.createReview);
+const reviewController = require("../controllers/reviewController");
+const protect = require("../middleware/auth");
+const role = require("../middleware/role");
 
-// @route   GET /api/reviews/book/:bookId
-// @desc    Retrieve all approved reviews for a specific book
-router.get('/book/:bookId', reviewController.getBookReviews);
+router.get("/", protect, role("admin", "librarian"), reviewController.getAllReviews);
 
-// @route   GET /api/reviews/
-// @desc    Retrieve all reviews (Admin & Librarian only)
-router.get(
-  '/', 
-  protect, 
-  role('admin', 'librarian'), 
-  reviewController.allReviews
-);
+router.get("/book/:bookId", reviewController.getBookReviews);
 
-// @route   PUT /api/reviews/:id/status
-// @desc    Update the approval status of a review (Admin & Librarian only)
+router.post("/book/:bookId", protect, reviewController.createReview);
+
 router.put(
-  '/:id/status', 
-  protect, 
-  role('admin', 'librarian'), 
+  "/:id/status",
+  protect,
+  role("admin", "librarian"),
   reviewController.updateReviewStatus
 );
 
-// @route   DELETE /api/reviews/:id
-// @desc    Delete a review (Admin & Librarian only)
 router.delete(
-  '/:id', 
-  protect, 
-  role('admin', 'librarian'), 
+  "/:id",
+  protect,
+  role("admin", "librarian"),
   reviewController.deleteReview
 );
 
