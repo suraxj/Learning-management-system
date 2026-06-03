@@ -14,23 +14,27 @@ const app = express();
 const allowedOrigins = [
   "http://localhost:5173",
   "https://learning-management-system-sand-mu.vercel.app",
-  process.env.CLIENT_URL,
-].filter(Boolean);
+  "https://learning-management-system-frontend-alpha.vercel.app",
+];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
 
-      return callback(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
 
-// Stripe webhook must be before express.json()
+    console.log("Blocked by CORS:", origin);
+    return callback(null, false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+
 app.post(
   "/api/payments/webhook",
   express.raw({ type: "application/json" }),
@@ -40,7 +44,7 @@ app.post(
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Library Management System API running");
+  res.send("Library Management System API Running");
 });
 
 app.use("/api/auth", require("./src/routes/authRoutes"));
