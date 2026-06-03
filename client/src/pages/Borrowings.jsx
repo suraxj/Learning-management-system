@@ -16,14 +16,14 @@ export default function Borrowings() {
   if (loading) return <p>Loading borrowings...</p>;
 
   return (
-    <div className="bg-white shadow rounded-xl p-6">
-      <h1 className="text-2xl font-bold mb-4">All Borrowings</h1>
+    <div className="bg-white shadow rounded-xl p-4 sm:p-6">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">All Borrowings</h1>
 
       {items.length === 0 ? (
         <p className="text-slate-500">No borrowings found.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="min-w-[700px] w-full text-sm">
             <thead>
               <tr className="text-left border-b">
                 <th className="py-2">User</th>

@@ -94,20 +94,20 @@ export default function Home() {
   const displayNotifications = notifications.slice(0, 4);
 
   return (
-    <div className="space-y-10">
-      <section className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-700 p-10 text-white shadow">
-        <h1 className="text-5xl font-bold mb-5">
+    <div className="space-y-6 sm:space-y-10">
+      <section className="rounded-3xl bg-gradient-to-r from-blue-700 to-indigo-700 p-6 sm:p-10 text-white shadow">
+        <h1 className="text-3xl sm:text-5xl font-bold mb-4 sm:mb-5">
           Manage your library in one place
         </h1>
 
-        <p className="text-2xl text-blue-100 mb-8">
+        <p className="text-lg sm:text-2xl text-blue-100 mb-6 sm:mb-8">
           Login, add books, borrow, reserve, return, search, and manage fines.
         </p>
 
-        <div className="flex gap-5 flex-wrap">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-5">
           <Link
             to="/books"
-            className="bg-white text-blue-700 px-8 py-4 rounded-2xl font-bold text-xl"
+            className="bg-white text-blue-700 px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg sm:text-xl text-center"
           >
             Browse Books
           </Link>
@@ -115,14 +115,14 @@ export default function Home() {
           {user && ["admin", "librarian"].includes(user.role) ? (
             <Link
               to="/admin"
-              className="bg-blue-500/40 text-white px-8 py-4 rounded-2xl font-bold text-xl border border-white/30"
+              className="bg-blue-500/40 text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg sm:text-xl border border-white/30 text-center"
             >
               Admin Panel
             </Link>
           ) : (
             <Link
               to="/login"
-              className="bg-blue-500/40 text-white px-8 py-4 rounded-2xl font-bold text-xl border border-white/30"
+              className="bg-blue-500/40 text-white px-6 sm:px-8 py-4 rounded-2xl font-bold text-lg sm:text-xl border border-white/30 text-center"
             >
               Login
             </Link>
@@ -130,7 +130,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="grid gap-6 md:grid-cols-4">
+      <section className="grid gap-4 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           icon={BookOpen}
           title="Total Books"
@@ -160,17 +160,17 @@ export default function Home() {
         />
       </section>
 
-      <section className="rounded-3xl bg-white p-8 shadow border border-slate-100">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-bold">Recent Borrowings</h2>
+      <section className="rounded-3xl bg-white p-4 sm:p-8 shadow border border-slate-100">
+        <div className="flex justify-between items-center gap-4 mb-6">
+          <h2 className="text-xl sm:text-2xl font-bold">Recent Borrowings</h2>
           <BarChart3 className="text-slate-400" size={32} />
         </div>
 
         {displayBorrowings.length === 0 ? (
           <p className="text-slate-500">No recent borrowings yet.</p>
         ) : (
-          <div className="overflow-hidden rounded-2xl border">
-            <table className="w-full text-left">
+          <div className="overflow-x-auto rounded-2xl border">
+            <table className="min-w-[700px] w-full text-left">
               <thead className="bg-slate-50 text-slate-500">
                 <tr>
                   <th className="p-4">Book</th>
@@ -219,20 +219,20 @@ export default function Home() {
         )}
       </section>
 
-      <section className="rounded-3xl bg-white p-8 shadow border border-slate-100">
+      <section className="rounded-3xl bg-white p-4 sm:p-8 shadow border border-slate-100">
         <h2 className="text-2xl font-bold mb-6">Notifications</h2>
 
         {displayNotifications.length === 0 ? (
           <p className="text-slate-500">No notifications yet.</p>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {displayNotifications.map((n) => (
               <div
                 key={n._id}
-                className="flex items-center gap-4 rounded-2xl bg-blue-50 p-5 text-blue-700"
+                className="flex items-start sm:items-center gap-3 sm:gap-4 rounded-2xl bg-blue-50 p-4 sm:p-5 text-blue-700"
               >
                 <Bell size={22} />
-                <p className="text-lg">
+                <p className="text-base sm:text-lg">
                   {n.title}: {n.message}
                 </p>
               </div>

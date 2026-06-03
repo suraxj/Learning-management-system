@@ -37,9 +37,9 @@ export default function ManageBooks() {
   if (isLoading) return <div className="text-center p-10">Loading catalog...</div>;
 
   return (
-    <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Manage Books</h1>
+    <div className="bg-white shadow-sm border border-slate-100 rounded-xl p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
+        <h1 className="text-xl sm:text-2xl font-bold">Manage Books</h1>
         <Link 
           className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium" 
           to="/admin/books/new"
@@ -49,7 +49,7 @@ export default function ManageBooks() {
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full text-sm text-left">
+        <table className="min-w-[700px] w-full text-sm text-left">
           <thead className="text-xs uppercase bg-slate-50 text-slate-600 border-b">
             <tr>
               <th className="px-4 py-3">Title</th>

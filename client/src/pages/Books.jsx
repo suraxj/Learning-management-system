@@ -34,12 +34,12 @@ export default function Books() {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-0 sm:p-4">
       {/* Search & Filter Bar */}
-      <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100 mb-8 grid md:grid-cols-4 gap-4">
+      <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm border border-slate-100 mb-6 sm:mb-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <input
           name="search"
-          className="border p-3 rounded-lg md:col-span-2 focus:ring-2 focus:ring-blue-500 outline-none"
+          className="border p-3 rounded-lg sm:col-span-2 focus:ring-2 focus:ring-blue-500 outline-none"
           placeholder="Search title, author, ISBN..."
           value={filters.search}
           onChange={handleFilterChange}
@@ -64,7 +64,7 @@ export default function Books() {
         
         <button 
           onClick={loadBooks} 
-          className="md:col-span-4 bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          className="sm:col-span-2 lg:col-span-4 bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
         >
           {isLoading ? 'Searching...' : 'Search Books'}
         </button>
@@ -74,7 +74,7 @@ export default function Books() {
       {isLoading ? (
         <div className="text-center py-10 text-slate-500">Loading books...</div>
       ) : (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {books.length > 0 ? (
             books.map((book) => <BookCard key={book._id} book={book} />)
           ) : (

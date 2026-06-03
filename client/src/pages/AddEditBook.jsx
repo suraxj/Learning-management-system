@@ -58,7 +58,7 @@ export default function AddEditBook() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="bg-white shadow rounded-xl p-6 grid md:grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="bg-white shadow rounded-xl p-4 sm:p-6 grid md:grid-cols-2 gap-4">
       <h1 className="text-2xl font-bold md:col-span-2">
         {id ? 'Edit Book' : 'Add Book'}
       </h1>
