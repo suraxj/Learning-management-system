@@ -11,5 +11,6 @@ router.post('/make-admin', adminSeed.makeAdmin);
 router.get('/me', protect, c.me);
 router.put('/profile', protect, c.updateProfile);
 router.put('/change-password', protect, c.changePassword);
+router.get('/users', protect, require('../middleware/role')('admin', 'librarian'), c.getAllUsers);
 
 module.exports = router;

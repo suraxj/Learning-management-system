@@ -44,6 +44,11 @@ const bookSchema = new mongoose.Schema(
       default: 1,
       min: 0,
     },
+    borrowPricePerDay: {
+      type: Number,
+      default: 20,
+      min: 0,
+    },
     averageRating: {
       type: Number,
       default: 0,

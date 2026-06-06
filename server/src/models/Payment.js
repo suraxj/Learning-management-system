@@ -5,5 +5,7 @@ const paymentSchema = new mongoose.Schema({
   amount: { type: Number, required: true },
   stripeSessionId: String,
   status: { type: String, enum: ['pending', 'paid', 'failed'], default: 'pending' },
+  paymentType: { type: String, enum: ['fine', 'borrow'], default: 'fine' },
+  paymentMethod: { type: String, default: 'None' },
 }, { timestamps: true });
 module.exports = mongoose.model('Payment', paymentSchema);

@@ -19,11 +19,34 @@ exports.borrowBook = async (req, res) => {
   if (!book) return res.status(404).json({ message: 'Book not found' });
   if (book.availableCopies < 1) return res.status(400).json({ message: 'Book not available. You can reserve it.' });
 
+  const daysRequested = Number(req.body.daysRequested || 14);
+  const paymentMethod = req.body.paymentMethod || 'None';
+  const borrowFee = daysRequested * (book.borrowPricePerDay || 20);
+
   book.availableCopies -= 1;
   await book.save();
 
-  const dueDate = new Date(Date.now() + Number(process.env.BORROW_DAYS || 14) * 24 * 60 * 60 * 1000);
-  const borrow = await Borrow.create({ user: req.user._id, book: book._id, dueDate });
+  const dueDate = new Date(Date.now() + daysRequested * 24 * 60 * 60 * 1000);
+  const borrow = await Borrow.create({
+    user: req.user._id,
+    book: book._id,
+    dueDate,
+    borrowDaysRequested: daysRequested,
+    borrowFee,
+    isPaid: true,
+    paymentMethod,
+  });
+
+  // Also create a successful payment record for this borrowing
+  const Payment = require('../models/Payment');
+  await Payment.create({
+    user: req.user._id,
+    borrow: borrow._id,
+    amount: borrowFee,
+    status: 'paid',
+    paymentType: 'borrow',
+    paymentMethod,
+  });
 
   res.status(201).json({ borrow });
 };
@@ -77,12 +100,48 @@ exports.returnBook = async (req, res) => {
   res.json({ borrow, fine });
 };
 
+const updateOverdueFines = async (borrowings) => {
+  const now = new Date();
+  const finePerDay = Number(process.env.FINE_PER_DAY || 10);
+
+  for (const b of borrowings) {
+    if (b.status !== 'returned') {
+      let isChanged = false;
+      if (now > b.dueDate) {
+        if (b.status !== 'overdue') {
+          b.status = 'overdue';
+          isChanged = true;
+        }
+        const overdueDays = Math.ceil((now - b.dueDate) / (24 * 60 * 60 * 1000));
+        const expectedFine = overdueDays * finePerDay;
+        if (b.fine !== expectedFine) {
+          b.fine = expectedFine;
+          isChanged = true;
+        }
+      }
+      if (isChanged) {
+        await b.save();
+      }
+    }
+  }
+};
+
 exports.myBorrowings = async (req, res) => {
-  const borrowings = await Borrow.find({ user: req.user._id }).populate('book').sort('-createdAt');
-  res.json({ borrowings });
+  try {
+    const borrowings = await Borrow.find({ user: req.user._id }).populate('book').sort('-createdAt');
+    await updateOverdueFines(borrowings);
+    res.json({ borrowings });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Failed to load user borrowings' });
+  }
 };
 
 exports.allBorrowings = async (req, res) => {
-  const borrowings = await Borrow.find().populate('user book').sort('-createdAt');
-  res.json({ borrowings });
+  try {
+    const borrowings = await Borrow.find().populate('user book').sort('-createdAt');
+    await updateOverdueFines(borrowings);
+    res.json({ borrowings });
+  } catch (error) {
+    res.status(500).json({ message: error.message || 'Failed to load borrowings' });
+  }
 };

@@ -54,6 +54,7 @@ export default function ManageBooks() {
             <tr>
               <th className="px-4 py-3">Title</th>
               <th className="px-4 py-3">ISBN</th>
+              <th className="px-4 py-3">Price/Day</th>
               <th className="px-4 py-3">Inventory</th>
               <th className="px-4 py-3 text-right">Actions</th>
             </tr>
@@ -63,6 +64,7 @@ export default function ManageBooks() {
               <tr key={b._id} className="hover:bg-slate-50 transition-colors">
                 <td className="px-4 py-3 font-medium text-slate-900">{b.title}</td>
                 <td className="px-4 py-3 text-slate-600">{b.isbn}</td>
+                <td className="px-4 py-3 font-semibold text-slate-700">₹{b.borrowPricePerDay || 20}</td>
                 <td className="px-4 py-3">
                   <span className={`font-semibold ${b.availableCopies === 0 ? 'text-red-600' : 'text-green-600'}`}>
                     {b.availableCopies}

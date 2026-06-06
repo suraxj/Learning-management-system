@@ -20,4 +20,16 @@ router.post(
   notificationController.announce
 );
 
+// @route   POST /api/notifications/send
+// @desc    Send direct notification to a specific user (Admin & Librarian only)
+router.post('/send', protect, role('admin', 'librarian'), notificationController.sendDirect);
+
+// @route   GET /api/notifications/sent
+// @desc    Get all sent notifications (Admin & Librarian only)
+router.get('/sent', protect, role('admin', 'librarian'), notificationController.allNotifications);
+
+// @route   DELETE /api/notifications/:id
+// @desc    Delete a sent notification (Admin & Librarian only)
+router.delete('/:id', protect, role('admin', 'librarian'), notificationController.deleteNotification);
+
 module.exports = router;

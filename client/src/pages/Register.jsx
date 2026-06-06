@@ -32,6 +32,7 @@ export default function Register() {
     <div className="flex justify-center items-center min-h-[60vh] p-4">
       <form 
         onSubmit={handleSubmit} 
+        autoComplete="off"
         className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 space-y-5 border border-slate-100"
       >
         <h2 className="text-2xl font-bold text-slate-900">Create Account</h2>
@@ -39,6 +40,7 @@ export default function Register() {
         <input
           name="name"
           required
+          autoComplete="new-password"
           className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
           placeholder="Full Name"
           value={form.name}
@@ -49,6 +51,7 @@ export default function Register() {
           name="email"
           type="email"
           required
+          autoComplete="new-password"
           className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
           placeholder="Email Address"
           value={form.email}
@@ -59,6 +62,7 @@ export default function Register() {
           name="password"
           type="password"
           required
+          autoComplete="new-password"
           className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
           placeholder="Password"
           value={form.password}

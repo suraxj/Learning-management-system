@@ -13,11 +13,28 @@ export default function Navbar() {
     }`;
 
   const closeMenu = () => setOpen(false);
+  const isAdmin = user && ["admin", "librarian"].includes(user.role);
+
+  const links = isAdmin ? [
+    { to: "/admin", label: "Dashboard" },
+    { to: "/books", label: "Books" },
+    { to: "/profile", label: "Users" },
+    { to: "/notifications", label: "Send Alerts" },
+    { to: "/admin/payments", label: "Payments" },
+  ] : [
+    { to: "/", label: "Dashboard" },
+    { to: "/books", label: "Books" },
+    ...(user ? [
+      { to: "/profile", label: "Profile" },
+      { to: "/notifications", label: "Notifications" },
+      { to: "/payments", label: "Payments" },
+    ] : []),
+  ];
 
   return (
     <nav className="bg-white border-b sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 sm:py-4 flex items-center justify-between gap-3">
-        <Link to="/" className="flex items-center gap-3 shrink-0" onClick={closeMenu}>
+        <Link to={isAdmin ? "/admin" : "/"} className="flex items-center gap-3 shrink-0" onClick={closeMenu}>
           <div className="bg-blue-600 text-white p-2.5 sm:p-3 rounded-2xl">
             <BookOpen size={26} />
           </div>
@@ -37,25 +54,20 @@ export default function Navbar() {
         </button>
 
         <div className="hidden md:flex items-center gap-2 lg:gap-3 text-base">
-          <NavLink to="/" className={navClass}>Dashboard</NavLink>
-          <NavLink to="/books" className={navClass}>Books</NavLink>
-
-          {user && ["admin", "librarian"].includes(user.role) && (
-            <NavLink to="/admin" className={navClass}>Admin</NavLink>
-          )}
-
-          {user && <NavLink to="/profile" className={navClass}>Profile</NavLink>}
-          {user && <NavLink to="/notifications" className={navClass}>Notifications</NavLink>}
-          {user && <NavLink to="/payments" className={navClass}>Payments</NavLink>}
+          {links.map((link) => (
+            <NavLink key={link.to} to={link.to} className={navClass} end>
+              {link.label}
+            </NavLink>
+          ))}
 
           {user ? (
             <>
-              <span className="hidden xl:inline bg-slate-100 px-4 py-3 rounded-xl text-slate-800 whitespace-nowrap">
+              <span className="hidden xl:inline bg-slate-100 px-4 py-3 rounded-xl text-slate-800 whitespace-nowrap animate-pulse">
                 {user.name} · {user.role}
               </span>
               <button
                 onClick={logout}
-                className="bg-slate-900 text-white px-5 py-3 rounded-xl font-semibold whitespace-nowrap"
+                className="bg-slate-900 text-white px-5 py-3 rounded-xl font-semibold whitespace-nowrap active:scale-[0.98] transition-transform"
               >
                 Logout
               </button>
@@ -73,16 +85,11 @@ export default function Navbar() {
 
       {open && (
         <div className="md:hidden border-t bg-white px-3 py-4 space-y-2 shadow-sm">
-          <NavLink onClick={closeMenu} to="/" className={navClass}>Dashboard</NavLink>
-          <NavLink onClick={closeMenu} to="/books" className={navClass}>Books</NavLink>
-
-          {user && ["admin", "librarian"].includes(user.role) && (
-            <NavLink onClick={closeMenu} to="/admin" className={navClass}>Admin</NavLink>
-          )}
-
-          {user && <NavLink onClick={closeMenu} to="/profile" className={navClass}>Profile</NavLink>}
-          {user && <NavLink onClick={closeMenu} to="/notifications" className={navClass}>Notifications</NavLink>}
-          {user && <NavLink onClick={closeMenu} to="/payments" className={navClass}>Payments</NavLink>}
+          {links.map((link) => (
+            <NavLink key={link.to} onClick={closeMenu} to={link.to} className={navClass} end>
+              {link.label}
+            </NavLink>
+          ))}
 
           {user ? (
             <button

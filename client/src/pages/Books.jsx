@@ -23,10 +23,14 @@ export default function Books() {
     }
   };
 
-  // Initial load
+  // Load books on filters change (live search)
   useEffect(() => {
-    loadBooks();
-  }, []);
+    const delayDebounce = setTimeout(() => {
+      loadBooks();
+    }, 150); // slight debounce to avoid excessive network queries as the user types
+
+    return () => clearTimeout(delayDebounce);
+  }, [filters]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -63,10 +67,13 @@ export default function Books() {
         </select>
         
         <button 
-          onClick={loadBooks} 
-          className="sm:col-span-2 lg:col-span-4 bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition-colors font-medium"
+          onClick={() => setFilters({ search: '', genre: '', status: '' })} 
+          className="sm:col-span-2 lg:col-span-4 bg-slate-600 hover:bg-slate-700 text-white p-3 rounded-lg transition-colors font-medium flex items-center justify-center gap-2"
         >
-          {isLoading ? 'Searching...' : 'Search Books'}
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 1121.21 8H17" />
+          </svg>
+          Reset Catalog Filters
         </button>
       </div>
 

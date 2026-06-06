@@ -13,6 +13,7 @@ const INITIAL_STATE = {
   coverImage: '',
   copies: 1,
   availableCopies: 1,
+  borrowPricePerDay: 20,
 };
 
 export default function AddEditBook() {
@@ -41,6 +42,7 @@ export default function AddEditBook() {
       publicationYear: Number(form.publicationYear),
       copies: Number(form.copies),
       availableCopies: Number(form.availableCopies),
+      borrowPricePerDay: Number(form.borrowPricePerDay || 20),
     };
 
     try {
@@ -82,7 +84,7 @@ export default function AddEditBook() {
         ) : (
           <input
             key={key}
-            type={['copies', 'availableCopies', 'publicationYear'].includes(key) ? 'number' : 'text'}
+            type={['copies', 'availableCopies', 'publicationYear', 'borrowPricePerDay'].includes(key) ? 'number' : 'text'}
             {...inputProps}
           />
         );
