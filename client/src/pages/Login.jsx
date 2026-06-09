@@ -38,15 +38,33 @@ export default function Login() {
           <h2 className="text-3xl font-black text-slate-950">Access your account</h2>
         </div>
 
-        <label className="block space-y-2">
-          <span className="text-sm font-bold text-slate-600">Email</span>
-          <div className="relative"><Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={19} /><input name="email" type="email" required autoComplete="new-password" className="soft-input pl-12" placeholder="you@example.com" value={form.email} onChange={handleChange} /></div>
-        </label>
+       <label className="block space-y-2">
+  <span className="text-sm font-bold text-slate-600">Email</span>
+  <input
+    name="email"
+    type="email"
+    required
+    autoComplete="new-password"
+    className="soft-input px-4"
+    placeholder="you@example.com"
+    value={form.email}
+    onChange={handleChange}
+  />
+</label>
 
-        <label className="block space-y-2">
-          <span className="text-sm font-bold text-slate-600">Password</span>
-          <div className="relative"><LockKeyhole className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={19} /><input name="password" type="password" required autoComplete="new-password" className="soft-input pl-12" placeholder="Enter password" value={form.password} onChange={handleChange} /></div>
-        </label>
+<label className="block space-y-2">
+  <span className="text-sm font-bold text-slate-600">Password</span>
+  <input
+    name="password"
+    type="password"
+    required
+    autoComplete="new-password"
+    className="soft-input px-4"
+    placeholder="Enter password"
+    value={form.password}
+    onChange={handleChange}
+  />
+</label>
 
         <div className="flex justify-end"><Link className="text-sm text-blue-600 font-semibold hover:underline" to="/forgot-password">Forgot password?</Link></div>
 

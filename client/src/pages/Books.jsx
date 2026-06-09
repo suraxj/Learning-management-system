@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Search, RotateCcw, BookOpen } from 'lucide-react';
+import { RotateCcw, BookOpen } from 'lucide-react';
 import api from '../api/axios';
 import BookCard from '../components/BookCard';
 
@@ -50,10 +50,15 @@ export default function Books() {
       </div>
 
       <div className="glass-card p-4 sm:p-5 rounded-3xl grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="relative sm:col-span-2">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-          <input name="search" className="soft-input pl-12" placeholder="Search title, author, ISBN..." value={filters.search} onChange={handleFilterChange} />
-        </div>
+       <div className="sm:col-span-2">
+  <input
+    name="search"
+    className="soft-input px-4"
+    placeholder="Search title, author, ISBN..."
+    value={filters.search}
+    onChange={handleFilterChange}
+  />
+</div>
         <input name="genre" className="soft-input" placeholder="Genre" value={filters.genre} onChange={handleFilterChange} />
         <select name="status" className="soft-input" value={filters.status} onChange={handleFilterChange}>
           <option value="">All Status</option>

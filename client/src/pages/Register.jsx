@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BookOpen, Mail, LockKeyhole, UserRound } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
@@ -39,10 +39,46 @@ export default function Register() {
           <h2 className="text-3xl font-black text-slate-950">Create Account</h2>
         </div>
 
-        <label className="block space-y-2"><span className="text-sm font-bold text-slate-600">Full Name</span><div className="relative"><UserRound className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={19} /><input name="name" required autoComplete="new-password" className="soft-input pl-12" placeholder="Your name" value={form.name} onChange={handleChange} /></div></label>
-        <label className="block space-y-2"><span className="text-sm font-bold text-slate-600">Email</span><div className="relative"><Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={19} /><input name="email" type="email" required autoComplete="new-password" className="soft-input pl-12" placeholder="you@example.com" value={form.email} onChange={handleChange} /></div></label>
-        <label className="block space-y-2"><span className="text-sm font-bold text-slate-600">Password</span><div className="relative"><LockKeyhole className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={19} /><input name="password" type="password" required autoComplete="new-password" className="soft-input pl-12" placeholder="Create password" value={form.password} onChange={handleChange} /></div></label>
+       <label className="block space-y-2">
+  <span className="text-sm font-bold text-slate-600">Full Name</span>
+  <input
+    name="name"
+    required
+    autoComplete="new-password"
+    className="soft-input px-4"
+    placeholder="Your name"
+    value={form.name}
+    onChange={handleChange}
+  />
+</label>
 
+<label className="block space-y-2">
+  <span className="text-sm font-bold text-slate-600">Email</span>
+  <input
+    name="email"
+    type="email"
+    required
+    autoComplete="new-password"
+    className="soft-input px-4"
+    placeholder="you@example.com"
+    value={form.email}
+    onChange={handleChange}
+  />
+</label>
+
+<label className="block space-y-2">
+  <span className="text-sm font-bold text-slate-600">Password</span>
+  <input
+    name="password"
+    type="password"
+    required
+    autoComplete="new-password"
+    className="soft-input px-4"
+    placeholder="Create password"
+    value={form.password}
+    onChange={handleChange}
+  />
+</label>
         <button type="submit" disabled={isLoading} className={`w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-3.5 rounded-2xl font-black shadow-lg shadow-blue-600/25 transition-all ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}>
           {isLoading ? 'Creating Account...' : 'Register'}
         </button>
