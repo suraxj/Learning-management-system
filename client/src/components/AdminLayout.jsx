@@ -12,7 +12,6 @@ import {
   Megaphone,
   Bell,
   Menu,
-  X,
   User,
   Sparkles,
   LogOut
