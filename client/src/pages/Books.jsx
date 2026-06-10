@@ -59,8 +59,8 @@ export default function Books() {
     onChange={handleFilterChange}
   />
 </div>
-        <input name="genre" className="soft-input" placeholder="Genre" value={filters.genre} onChange={handleFilterChange} />
-        <select name="status" className="soft-input" value={filters.status} onChange={handleFilterChange}>
+        <input name="genre" className="soft-input px-4" placeholder="Genre" value={filters.genre} onChange={handleFilterChange} />
+        <select name="status" className="soft-input px-4" value={filters.status} onChange={handleFilterChange}>
           <option value="">All Status</option>
           <option value="available">Available</option>
           <option value="unavailable">Unavailable</option>

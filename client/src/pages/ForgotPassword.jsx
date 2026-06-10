@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { Mail, KeyRound } from 'lucide-react';
 import api from '../api/axios';
 
 export default function ForgotPassword() {
@@ -14,7 +15,7 @@ export default function ForgotPassword() {
     try {
       const { data } = await api.post('/auth/forgot-password', { email });
       toast.success(data.message || 'Reset link sent to your email');
-      setEmail(''); // Clear form after success
+      setEmail('');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to send reset link');
     } finally {
@@ -23,33 +24,40 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-[60vh] p-4">
+    <div className="flex justify-center items-center min-h-[65vh] p-4">
       <form 
         onSubmit={handleSubmit} 
-        className="w-full max-w-md bg-white shadow-lg rounded-2xl p-8 space-y-6 border border-slate-100"
+        className="w-full max-w-md bg-white border border-slate-200/80 shadow-md shadow-blue-900/5 rounded-[2.5rem] p-8 sm:p-10 space-y-6"
       >
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-slate-900">Forgot Password</h2>
-          <p className="text-slate-500 text-sm mt-2">
+        <div className="text-center space-y-2">
+          <div className="mx-auto bg-blue-50 text-[#0077d6] w-fit p-3.5 rounded-2xl border border-blue-100">
+            <KeyRound size={28} />
+          </div>
+          <h2 className="text-2xl font-black text-slate-900">Forgot Password</h2>
+          <p className="text-slate-500 text-xs font-semibold leading-relaxed">
             Enter your email to receive a password reset link.
           </p>
         </div>
 
-        <input
-          type="email"
-          required
-          className="w-full border border-slate-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none transition-all"
-          placeholder="name@example.com"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <label className="block space-y-1.5 text-left">
+          <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Email Address</span>
+          <div className="relative flex items-center">
+            <Mail className="absolute left-4 text-slate-400" size={16} />
+            <input
+              type="email"
+              required
+              className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+              placeholder="name@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
+        </label>
 
         <button
           type="submit"
           disabled={isLoading}
-          className={`w-full bg-blue-600 text-white py-3 rounded-lg font-semibold transition-all ${
-            isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:bg-blue-700 hover:shadow-lg'
-          }`}
+          className="w-full bg-[#0077d6] hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-sm shadow-md shadow-blue-500/10 transition-all hover:-translate-y-0.5 duration-200 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
         >
           {isLoading ? 'Sending...' : 'Send Reset Link'}
         </button>

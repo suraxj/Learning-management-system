@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BookOpen, LockKeyhole, Mail } from 'lucide-react';
+import { BookOpen, LockKeyhole, Mail, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Login() {
@@ -25,54 +25,100 @@ export default function Login() {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-6 items-center min-h-[72vh]">
-      <div className="hidden lg:block rounded-[2rem] bg-gradient-to-br from-blue-600 to-cyan-500 p-10 text-white shadow-2xl shadow-blue-600/20">
-        <div className="bg-white/15 w-fit p-4 rounded-3xl mb-8"><BookOpen size={42} /></div>
-        <h1 className="text-5xl font-black leading-tight">Welcome back to Smart Library</h1>
-        <p className="text-blue-50 text-lg mt-5">Manage books, borrowings, reservations, fines and notifications from one clean dashboard.</p>
-      </div>
-
-      <form onSubmit={handleSubmit} autoComplete="off" className="w-full max-w-md mx-auto glass-card rounded-[2rem] p-7 sm:p-9 space-y-5">
-        <div>
-          <p className="text-blue-600 font-bold">Login</p>
-          <h2 className="text-3xl font-black text-slate-950">Access your account</h2>
+    <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[75vh] py-4 sm:py-8">
+      {/* Redesigned Left Card (Dark navy visual block like the footer) */}
+      <div className="hidden lg:flex flex-col justify-between h-full rounded-[2.5rem] bg-gradient-to-br from-[#0b172a] to-[#1e293b] p-12 text-white shadow-xl relative overflow-hidden border border-slate-800">
+        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl animate-pulse" />
+        
+        <div className="space-y-6 relative">
+          <div className="bg-[#0077d6] text-white w-fit p-3.5 rounded-2xl shadow-lg shadow-blue-500/25">
+            <BookOpen size={30} />
+          </div>
+          <h1 className="text-4xl lg:text-5xl font-black leading-tight tracking-tight">
+            Welcome back to <span className="text-blue-400">LMS Library</span>
+          </h1>
+          <p className="text-slate-400 font-medium text-base leading-relaxed">
+            Log in to manage your checked-out books, request reservations, view direct alerts, and settle active fine balances securely.
+          </p>
         </div>
 
-       <label className="block space-y-2">
-  <span className="text-sm font-bold text-slate-600">Email</span>
-  <input
-    name="email"
-    type="email"
-    required
-    autoComplete="new-password"
-    className="soft-input px-4"
-    placeholder="you@example.com"
-    value={form.email}
-    onChange={handleChange}
-  />
-</label>
+        <div className="mt-8 pt-8 border-t border-white/5 space-y-3.5 relative">
+          {[
+            "Search and request from 5,000+ catalog titles",
+            "Stripe-powered checkout fine payment integrations",
+            "Real-time notifications for overdue returns"
+          ].map((benefit, idx) => (
+            <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-300">
+              <ChevronRight size={16} className="text-[#0077d6]" />
+              <span>{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-<label className="block space-y-2">
-  <span className="text-sm font-bold text-slate-600">Password</span>
-  <input
-    name="password"
-    type="password"
-    required
-    autoComplete="new-password"
-    className="soft-input px-4"
-    placeholder="Enter password"
-    value={form.password}
-    onChange={handleChange}
-  />
-</label>
+      {/* Login Form Card */}
+      <form onSubmit={handleSubmit} autoComplete="off" className="w-full max-w-md mx-auto bg-white border border-slate-200/80 shadow-md shadow-blue-900/5 rounded-[2.5rem] p-8 sm:p-10 space-y-6">
+        <div>
+          <span className="text-xs font-black uppercase text-[#0077d6] tracking-widest">Login</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Access your account</h2>
+        </div>
 
-        <div className="flex justify-end"><Link className="text-sm text-blue-600 font-semibold hover:underline" to="/forgot-password">Forgot password?</Link></div>
+        <div className="space-y-4">
+          <label className="block space-y-1.5">
+            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Email Address</span>
+            <div className="relative flex items-center">
+              <Mail className="absolute left-4 text-slate-400" size={16} />
+              <input
+                name="email"
+                type="email"
+                required
+                autoComplete="new-password"
+                className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={handleChange}
+              />
+            </div>
+          </label>
 
-        <button type="submit" disabled={isLoading} className={`w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-3.5 rounded-2xl font-black shadow-lg shadow-blue-600/25 transition-all ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}>
-          {isLoading ? 'Logging in...' : 'Login'}
+          <label className="block space-y-1.5">
+            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Password</span>
+            <div className="relative flex items-center">
+              <LockKeyhole className="absolute left-4 text-slate-400" size={16} />
+              <input
+                name="password"
+                type="password"
+                required
+                autoComplete="new-password"
+                className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+                placeholder="Enter password"
+                value={form.password}
+                onChange={handleChange}
+              />
+            </div>
+          </label>
+        </div>
+
+        <div className="flex justify-end">
+          <Link className="text-xs text-[#0077d6] font-bold hover:underline" to="/forgot-password">
+            Forgot password?
+          </Link>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-[#0077d6] hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-sm shadow-md shadow-blue-500/10 transition-all hover:-translate-y-0.5 duration-200 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+        >
+          {isLoading ? 'Logging in...' : 'Login to Account'}
         </button>
 
-        <p className="text-center text-slate-600 text-sm">New user? <Link className="text-blue-600 font-black hover:underline" to="/register">Register here</Link></p>
+        <p className="text-center text-slate-500 text-xs font-bold uppercase tracking-wide">
+          New user?{' '}
+          <Link className="text-[#0077d6] font-black hover:underline" to="/register">
+            Register here
+          </Link>
+        </p>
       </form>
     </div>
   );

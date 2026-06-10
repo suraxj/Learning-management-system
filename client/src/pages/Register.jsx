@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, LockKeyhole, Mail, User, ChevronRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Register() {
@@ -25,65 +25,111 @@ export default function Register() {
   };
 
   return (
-    <div className="grid lg:grid-cols-2 gap-6 items-center min-h-[72vh]">
-      <div className="hidden lg:block rounded-[2rem] bg-slate-950 p-10 text-white shadow-2xl shadow-slate-900/20 relative overflow-hidden">
-        <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-blue-500/25 blur-3xl" />
-        <div className="relative bg-white/10 w-fit p-4 rounded-3xl mb-8"><BookOpen size={42} /></div>
-        <h1 className="relative text-5xl font-black leading-tight">Create your digital library account</h1>
-        <p className="relative text-slate-300 text-lg mt-5">Borrow books, view notifications, manage payments and track your profile easily.</p>
-      </div>
-
-      <form onSubmit={handleSubmit} autoComplete="off" className="w-full max-w-md mx-auto glass-card rounded-[2rem] p-7 sm:p-9 space-y-5">
-        <div>
-          <p className="text-blue-600 font-bold">Register</p>
-          <h2 className="text-3xl font-black text-slate-950">Create Account</h2>
+    <div className="grid lg:grid-cols-2 gap-8 items-center min-h-[75vh] py-4 sm:py-8">
+      {/* Redesigned Left Card (Dark navy visual block like the footer) */}
+      <div className="hidden lg:flex flex-col justify-between h-full rounded-[2.5rem] bg-gradient-to-br from-[#0b172a] to-[#1e293b] p-12 text-white shadow-xl relative overflow-hidden border border-slate-800">
+        <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-blue-500/10 blur-3xl animate-pulse" />
+        
+        <div className="space-y-6 relative">
+          <div className="bg-[#0077d6] text-white w-fit p-3.5 rounded-2xl shadow-lg shadow-blue-500/25">
+            <BookOpen size={30} />
+          </div>
+          <h1 className="text-4xl lg:text-5xl font-black leading-tight tracking-tight">
+            Join the modern <span className="text-blue-400">LMS Community</span>
+          </h1>
+          <p className="text-slate-400 font-medium text-base leading-relaxed">
+            Create an account to gain access to dynamic bookmarks, track overdue fines, review titles, and save list settings.
+          </p>
         </div>
 
-       <label className="block space-y-2">
-  <span className="text-sm font-bold text-slate-600">Full Name</span>
-  <input
-    name="name"
-    required
-    autoComplete="new-password"
-    className="soft-input px-4"
-    placeholder="Your name"
-    value={form.name}
-    onChange={handleChange}
-  />
-</label>
+        <div className="mt-8 pt-8 border-t border-white/5 space-y-3.5 relative">
+          {[
+            "Borrow up to 3 books concurrently",
+            "Book reservations instantly when items are returned",
+            "Integrated payment methods for fine settlements"
+          ].map((benefit, idx) => (
+            <div key={idx} className="flex items-center gap-2.5 text-sm font-semibold text-slate-300">
+              <ChevronRight size={16} className="text-[#0077d6]" />
+              <span>{benefit}</span>
+            </div>
+          ))}
+        </div>
+      </div>
 
-<label className="block space-y-2">
-  <span className="text-sm font-bold text-slate-600">Email</span>
-  <input
-    name="email"
-    type="email"
-    required
-    autoComplete="new-password"
-    className="soft-input px-4"
-    placeholder="you@example.com"
-    value={form.email}
-    onChange={handleChange}
-  />
-</label>
+      {/* Register Form Card */}
+      <form onSubmit={handleSubmit} autoComplete="off" className="w-full max-w-md mx-auto bg-white border border-slate-200/80 shadow-md shadow-blue-900/5 rounded-[2.5rem] p-8 sm:p-10 space-y-6">
+        <div>
+          <span className="text-xs font-black uppercase text-[#0077d6] tracking-widest">Register</span>
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">Create Account</h2>
+        </div>
 
-<label className="block space-y-2">
-  <span className="text-sm font-bold text-slate-600">Password</span>
-  <input
-    name="password"
-    type="password"
-    required
-    autoComplete="new-password"
-    className="soft-input px-4"
-    placeholder="Create password"
-    value={form.password}
-    onChange={handleChange}
-  />
-</label>
-        <button type="submit" disabled={isLoading} className={`w-full bg-gradient-to-r from-blue-600 to-cyan-500 text-white p-3.5 rounded-2xl font-black shadow-lg shadow-blue-600/25 transition-all ${isLoading ? 'opacity-70 cursor-not-allowed' : 'hover:-translate-y-0.5'}`}>
+        <div className="space-y-4">
+          <label className="block space-y-1.5">
+            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Full Name</span>
+            <div className="relative flex items-center">
+              <User className="absolute left-4 text-slate-400" size={16} />
+              <input
+                name="name"
+                type="text"
+                required
+                autoComplete="new-password"
+                className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+                placeholder="Your name"
+                value={form.name}
+                onChange={handleChange}
+              />
+            </div>
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Email Address</span>
+            <div className="relative flex items-center">
+              <Mail className="absolute left-4 text-slate-400" size={16} />
+              <input
+                name="email"
+                type="email"
+                required
+                autoComplete="new-password"
+                className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+                placeholder="you@example.com"
+                value={form.email}
+                onChange={handleChange}
+              />
+            </div>
+          </label>
+
+          <label className="block space-y-1.5">
+            <span className="text-xs font-black text-slate-500 uppercase tracking-wider">Password</span>
+            <div className="relative flex items-center">
+              <LockKeyhole className="absolute left-4 text-slate-400" size={16} />
+              <input
+                name="password"
+                type="password"
+                required
+                autoComplete="new-password"
+                className="soft-input pl-11 pr-4 text-sm font-semibold text-slate-800"
+                placeholder="Create password"
+                value={form.password}
+                onChange={handleChange}
+              />
+            </div>
+          </label>
+        </div>
+
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-[#0077d6] hover:bg-blue-700 text-white py-3.5 rounded-2xl font-black text-sm shadow-md shadow-blue-500/10 transition-all hover:-translate-y-0.5 duration-200 cursor-pointer disabled:opacity-75 disabled:cursor-not-allowed"
+        >
           {isLoading ? 'Creating Account...' : 'Register'}
         </button>
 
-        <p className="text-center text-slate-600 text-sm">Already have an account? <Link className="text-blue-600 font-black hover:underline" to="/login">Login here</Link></p>
+        <p className="text-center text-slate-500 text-xs font-bold uppercase tracking-wide">
+          Already have an account?{' '}
+          <Link className="text-[#0077d6] font-black hover:underline" to="/login">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );

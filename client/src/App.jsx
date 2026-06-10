@@ -1,8 +1,9 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 import RoleRoute from "./components/RoleRoute";
+import AdminLayout from "./components/AdminLayout";
 
 import Home from "./pages/Home";
 import Login from "./pages/Login";
@@ -27,6 +28,29 @@ import AdminPayments from "./pages/AdminPayments";
 import AdminAnnouncements from "./pages/AdminAnnouncements";
 
 export default function App() {
+  const location = useLocation();
+  const isAdminPath = location.pathname.startsWith("/admin");
+
+  if (isAdminPath) {
+    return (
+      <AdminLayout>
+        <Routes>
+          <Route path="/admin" element={<RoleRoute roles={["admin", "librarian"]}><AdminDashboard /></RoleRoute>} />
+          <Route path="/admin/books" element={<RoleRoute roles={["admin", "librarian"]}><ManageBooks /></RoleRoute>} />
+          <Route path="/admin/books/new" element={<RoleRoute roles={["admin", "librarian"]}><AddEditBook /></RoleRoute>} />
+          <Route path="/admin/books/:id/edit" element={<RoleRoute roles={["admin", "librarian"]}><AddEditBook /></RoleRoute>} />
+          <Route path="/admin/borrowings" element={<RoleRoute roles={["admin", "librarian"]}><Borrowings /></RoleRoute>} />
+          <Route path="/admin/reservations" element={<RoleRoute roles={["admin", "librarian"]}><Reservations /></RoleRoute>} />
+          <Route path="/admin/reviews" element={<RoleRoute roles={["admin", "librarian"]}><ReviewsAdmin /></RoleRoute>} />
+          <Route path="/admin/reports" element={<RoleRoute roles={["admin", "librarian"]}><Reports /></RoleRoute>} />
+          <Route path="/admin/payments" element={<RoleRoute roles={["admin", "librarian"]}><AdminPayments /></RoleRoute>} />
+          <Route path="/admin/announcements" element={<RoleRoute roles={["admin"]}><AdminAnnouncements /></RoleRoute>} />
+          <Route path="*" element={<div className="glass-card rounded-3xl p-10 text-center text-2xl font-bold">404 - Page Not Found</div>} />
+        </Routes>
+      </AdminLayout>
+    );
+  }
+
   return (
     <div className="min-h-screen text-slate-900">
       <Navbar />
@@ -47,17 +71,6 @@ export default function App() {
           <Route path="/payments" element={<ProtectedRoute><PaymentHistory /></ProtectedRoute>} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/payment-cancel" element={<PaymentCancel />} />
-
-          <Route path="/admin" element={<RoleRoute roles={["admin", "librarian"]}><AdminDashboard /></RoleRoute>} />
-          <Route path="/admin/books" element={<RoleRoute roles={["admin", "librarian"]}><ManageBooks /></RoleRoute>} />
-          <Route path="/admin/books/new" element={<RoleRoute roles={["admin", "librarian"]}><AddEditBook /></RoleRoute>} />
-          <Route path="/admin/books/:id/edit" element={<RoleRoute roles={["admin", "librarian"]}><AddEditBook /></RoleRoute>} />
-          <Route path="/admin/borrowings" element={<RoleRoute roles={["admin", "librarian"]}><Borrowings /></RoleRoute>} />
-          <Route path="/admin/reservations" element={<RoleRoute roles={["admin", "librarian"]}><Reservations /></RoleRoute>} />
-          <Route path="/admin/reviews" element={<RoleRoute roles={["admin", "librarian"]}><ReviewsAdmin /></RoleRoute>} />
-          <Route path="/admin/reports" element={<RoleRoute roles={["admin", "librarian"]}><Reports /></RoleRoute>} />
-          <Route path="/admin/payments" element={<RoleRoute roles={["admin", "librarian"]}><AdminPayments /></RoleRoute>} />
-          <Route path="/admin/announcements" element={<RoleRoute roles={["admin"]}><AdminAnnouncements /></RoleRoute>} />
 
           <Route path="*" element={<div className="glass-card rounded-3xl p-10 text-center text-2xl font-bold">404 - Page Not Found</div>} />
         </Routes>
